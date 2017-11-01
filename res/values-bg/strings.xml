@@ -17,6 +17,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label" msgid="1090682794607161063">"Информация за спешни случаи"</string>
+    <string name="medical_info_title" msgid="3000192781136934887">"Медицинска информация"</string>
+    <string name="edit_medical_info" msgid="6733720353375319476">"Редактиране на информацията"</string>
     <string name="edit_info" msgid="5973929805855224805">"Редактиране на информацията за спешни случаи"</string>
     <string name="tab_title_info" msgid="1402033103294855812">"Информация"</string>
     <string name="tab_title_contacts" msgid="4298341166404791209">"Контакти"</string>
@@ -87,18 +89,21 @@
     <!-- no translation found for organ_donor_entries:2 (9037713957399818892) -->
     <string name="emergency_contacts_title" msgid="5462202017417821030">"Контакти при спешни случаи"</string>
     <string name="add_emergency_contact" msgid="4063577069613981029">"Добавяне на контакт"</string>
+    <string name="fail_load_contact_picker" msgid="817205483833876726">"Не можа да бъде намерен инструмент за избор на контакти"</string>
+    <string name="fail_display_contact" msgid="4128854688897045879">"Контактът не може да бъде показан"</string>
     <string name="remove_contact" msgid="6934983445723096759">"Искате ли да премахнете <xliff:g id="CONTACT_NAME">%1$s</xliff:g> от контактите при спешни случаи?"</string>
     <string name="remove_contact_icon_text" msgid="4576641386490101363">"Премахване на контакта"</string>
+    <string name="fail_add_contact" msgid="6511490846952942291">"Информацията за връзка не може да се разчете правилно"</string>
     <string name="remove" msgid="1243949503772376064">"Премахване"</string>
     <string name="cancel" msgid="7401575239009060939">"Отказ"</string>
     <string name="ok" msgid="163967937451981024">"ОK"</string>
     <string name="phone_type_and_phone_number" msgid="5034188169563878371">"<xliff:g id="PHONE_TYPE">%1$s</xliff:g> • <xliff:g id="PHONE_NUMBER">%2$s</xliff:g>"</string>
-    <string name="user_emergency_info_title" msgid="7827058167207376581">"Информация за спешни случаи"</string>
-    <string name="user_emergency_info_consent" msgid="5636028073450797246">"Информацията, която въведете тук, може да помогне на органите за бързо реагиране при спешен случай. Тези данни се съхраняват само на устройството ви и всеки ще е в състояние да ги прочете от клавиатурата за набиране на спешни номера, без да отключва телефона ви."</string>
-    <string name="emergency_info_continue" msgid="5453201508537906087">"Напред"</string>
     <string name="no_info_provided" msgid="716200382010821001">"Няма информация за собственика на телефона"</string>
     <string name="tap_pencil" msgid="2723698054265296934">"Ако това е вашият телефон, докоснете иконата на молив, за да добавите информация, която ще се показва тук при спешни случаи"</string>
-    <string name="clear_all" msgid="8899013032870561633">"Изчиств. на вс."</string>
+    <string name="clear_all" msgid="8899013032870561633">"Изчиств. на всичко"</string>
     <string name="clear" msgid="3648880442502887163">"Изчистване"</string>
     <string name="clear_all_message" msgid="1548432000373861295">"Да се изчистят ли всички данни и контакти?"</string>
+    <string name="emergency_info_footer" msgid="4694516011247606250">"Добавянето на медицинска информация и контакти за спешни случаи може да помогне на органите за бързо реагиране при необходимост.\n\nВсеки може да прочете тази информация на заключения ви екран, без да отключва телефона ви."</string>
+    <string name="settings_suggestion_title" msgid="2503369576806243476">"Добавяне на информация за спешни случаи"</string>
+    <string name="settings_suggestion_body" msgid="6623265155762787567">"Помогнете на органите за бързо реагиране да намерят важна информация"</string>
 </resources>

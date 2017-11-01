@@ -16,6 +16,7 @@
 package com.android.emergency.preferences;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,19 +28,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.preference.Preference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceViewHolder;
 import android.text.BidiFormatter;
 import android.text.TextDirectionHeuristics;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.emergency.CircleFramedDrawable;
 import com.android.emergency.EmergencyContactManager;
 import com.android.emergency.R;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.logging.MetricsLogger;
-import com.android.internal.logging.MetricsProto.MetricsEvent;
-import com.android.settingslib.drawable.CircleFramedDrawable;
+import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
 import java.util.List;
 
@@ -49,6 +54,16 @@ import java.util.List;
  */
 public class ContactPreference extends Preference {
 
+    private static final String TAG = "ContactPreference";
+
+    static final ContactFactory DEFAULT_CONTACT_FACTORY = new ContactFactory() {
+        @Override
+        public EmergencyContactManager.Contact getContact(Context context, Uri phoneUri) {
+            return EmergencyContactManager.getContact(context, phoneUri);
+        }
+    };
+
+    private final ContactFactory mContactFactory;
     private EmergencyContactManager.Contact mContact;
     @Nullable private RemoveContactPreferenceListener mRemoveContactPreferenceListener;
     @Nullable private AlertDialog mRemoveContactDialog;
@@ -64,29 +79,54 @@ public class ContactPreference extends Preference {
     }
 
     /**
+     * Interface for getting a contact for a phone number Uri.
+     */
+    public interface ContactFactory {
+        /**
+         * Gets a {@link EmergencyContactManager.Contact} for a phone {@link Uri}.
+         *
+         * @param context The context to use.
+         * @param phoneUri The phone uri.
+         * @return a contact for the given phone uri.
+         */
+        EmergencyContactManager.Contact getContact(Context context, Uri phoneUri);
+    }
+
+    public ContactPreference(Context context, AttributeSet attributes) {
+        super(context, attributes);
+        mContactFactory = DEFAULT_CONTACT_FACTORY;
+    }
+
+    /**
      * Instantiates a ContactPreference that displays an emergency contact, taking in a Context and
      * the Uri.
      */
-    public ContactPreference(Context context, @NonNull Uri contactUri) {
+    public ContactPreference(Context context, @NonNull Uri phoneUri) {
+        this(context, phoneUri, DEFAULT_CONTACT_FACTORY);
+    }
+
+    @VisibleForTesting
+    ContactPreference(Context context, @NonNull Uri phoneUri,
+            @NonNull ContactFactory contactFactory) {
         super(context);
+        mContactFactory = contactFactory;
         setOrder(DEFAULT_ORDER);
 
-        setUri(contactUri);
+        setPhoneUri(phoneUri);
 
         setWidgetLayoutResource(R.layout.preference_user_delete_widget);
         setPersistent(false);
     }
 
-    public void setUri(@NonNull Uri contactUri) {
-        if (mContact != null && !contactUri.equals(mContact.getContactUri()) &&
+    public void setPhoneUri(@NonNull Uri phoneUri) {
+        if (mContact != null && !phoneUri.equals(mContact.getPhoneUri()) &&
                 mRemoveContactDialog != null) {
             mRemoveContactDialog.dismiss();
         }
-
-        mContact = EmergencyContactManager.getContact(getContext(), contactUri);
+        mContact = mContactFactory.getContact(getContext(), phoneUri);
 
         setTitle(mContact.getName());
-        setKey(mContact.getContactUri().toString());
+        setKey(mContact.getPhoneUri().toString());
         String summary = mContact.getPhoneType() == null ?
                 mContact.getPhoneNumber() :
                 String.format(
@@ -145,9 +185,9 @@ public class ContactPreference extends Preference {
     }
 
     @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
-        View deleteContactIcon = view.findViewById(R.id.delete_contact);
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        View deleteContactIcon = holder.findViewById(R.id.delete_contact);
         if (mRemoveContactPreferenceListener == null) {
             deleteContactIcon.setVisibility(View.GONE);
         } else {
@@ -161,8 +201,8 @@ public class ContactPreference extends Preference {
         }
     }
 
-    public Uri getContactUri() {
-        return mContact.getContactUri();
+    public Uri getPhoneUri() {
+        return mContact.getPhoneUri();
     }
 
     @VisibleForTesting
@@ -198,9 +238,18 @@ public class ContactPreference extends Preference {
      * Displays a contact card for the contact.
      */
     public void displayContact() {
-        Intent contactIntent = new Intent(Intent.ACTION_VIEW);
-        contactIntent.setData(mContact.getContactLookupUri());
-        getContext().startActivity(contactIntent);
+        Intent displayIntent = new Intent(Intent.ACTION_VIEW);
+        displayIntent.setData(mContact.getContactLookupUri());
+        try {
+            getContext().startActivity(displayIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(),
+                           getContext().getString(R.string.fail_display_contact),
+                           Toast.LENGTH_LONG).show();
+            Log.w(TAG, "No contact app available to display the contact", e);
+            return;
+        }
+
     }
 
     /** Shows the dialog to remove the contact, restoring it from {@code state} if it's not null. */
