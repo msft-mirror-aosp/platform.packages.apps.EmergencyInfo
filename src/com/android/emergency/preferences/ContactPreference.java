@@ -232,9 +232,8 @@ public class ContactPreference extends Preference {
      * Displays a contact card for the contact.
      */
     public void displayContact() {
-        Intent displayIntent = new Intent(Intent.ACTION_VIEW)
-                .setData(mContact.getContactLookupUri())
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent displayIntent = new Intent(Intent.ACTION_VIEW);
+        displayIntent.setData(mContact.getContactLookupUri());
         try {
             getContext().startActivity(displayIntent);
         } catch (ActivityNotFoundException e) {
