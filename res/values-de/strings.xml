@@ -17,7 +17,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label" msgid="1090682794607161063">"Notfallinformationen"</string>
-    <string name="medical_info_title" msgid="3000192781136934887">"Medizinische Informationen"</string>
+    <string name="medical_info_title" msgid="3000192781136934887">"Medizinische Daten"</string>
     <string name="add_medical_info" msgid="483921612415907139">"Informationen hinzufügen"</string>
     <string name="edit_info" msgid="5973929805855224805">"Notfallinformationen bearbeiten"</string>
     <string name="tab_title_info" msgid="1402033103294855812">"Info"</string>
@@ -77,7 +77,7 @@
     <string name="medications" msgid="644428945685557183">"Medikamente"</string>
     <string name="unknown_medications" msgid="2764171064510423734">"Unbekannt"</string>
     <string name="medications_hint" msgid="3221620025945593723">"Beispiel: Aspirin"</string>
-    <string name="medical_conditions" msgid="3555690011498283592">"Medizinische Informationen"</string>
+    <string name="medical_conditions" msgid="3555690011498283592">"Medizinische Daten"</string>
     <string name="unknown_medical_conditions" msgid="8051364895172053770">"Unbekannt"</string>
     <string name="medical_conditions_hint" msgid="6959152183029062882">"Beispiel: Asthma"</string>
     <string name="organ_donor" msgid="5953509460007124827">"Organspender"</string>
